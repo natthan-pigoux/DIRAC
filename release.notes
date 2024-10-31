@@ -1,3 +1,21 @@
+[v9.0.0a32]
+
+*Resources
+
+FIX: (#7839) hide private keys from the logs
+FIX: (#7832) AREX interactions with tokens
+FIX: (#7831) Drop CloudCE proxy handling
+FIX: (#7829) CloudCE: truncate long messages returned from create_node
+
+*Core
+
+CHANGE: (#7837) minimum version of some packages
+
+*TransformationSystem
+
+NEW: (#7833) 
+CHANGE: (#7833) Improve getTransformationFiles performance
+
 [v9.0.0a31]
 
 *WorkloadManagement
