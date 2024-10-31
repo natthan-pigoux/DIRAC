@@ -19,7 +19,7 @@ jobs:
         run: |
           source /usr/share/miniconda3/etc/profile.d/conda.sh
 
-          conda create -n CVMFS_deploy openssl=3.0.0 gct
+          conda create -n CVMFS_deploy openssl=3.0.7 gct
           conda activate CVMFS_deploy
 
           echo "$CVMFS_PROXY_BASE64" | base64 --decode > cvmfs.proxy
