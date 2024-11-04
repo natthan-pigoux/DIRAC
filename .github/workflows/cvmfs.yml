@@ -7,10 +7,8 @@ jobs:
   deploy_CVMFS:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: mamba-org/setup-micromamba@v2
+      - uses: conda-incubator/setup-miniconda@v3
         with:
-
-          mamba-version: "*"
           channels: conda-forge,defaults
           channel-priority: true
       - name: Deploy on CVMFS
