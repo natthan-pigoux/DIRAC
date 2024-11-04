@@ -158,10 +158,17 @@ class DowntimeCommand(Command):
 
             # Determine the SE type and update gOCDBServiceType accordingly
             se_type = se.options.get("SEType", "")
+            diskOrTape = ""
             if re.search(r"D[1-9]", se_type):
-                gOCDBServiceType = diracToGOC_conversion[f"disk_{se_protocols[0]}"]
+                diskOrTape = "disk"
             elif re.search(r"T[1-9]", se_type):
-                gOCDBServiceType = diracToGOC_conversion[f"tape_{se_protocols[0]}"]
+                diskOrTape = "tape"
+            # iterate on the protocols and get the first one
+            for protocol in se_protocols:
+                dirac_protocol = f"{diskOrTape}_{protocol}"
+                if dirac_protocol in diracToGOC_conversion:
+                    gOCDBServiceType = diracToGOC_conversion[dirac_protocol]
+                    break
 
             # Get the SE hosts and return an error if none are found
             res = getSEHosts(elementName)
@@ -174,8 +181,10 @@ class DowntimeCommand(Command):
             elementName = seHosts  # in this case it will return a list, because there might be more than one host only
 
         elif elementType in ["FTS", "FTS3"]:
-            gOCDBServiceType = diracToGOC_conversion[elementType]
-            # WARNING: this method presupposes that the server is an FTS3 type
+            try:
+                gOCDBServiceType = diracToGOC_conversion[elementType]
+            except KeyError:  # not a GOC type (? how can this happen ?)
+                gOCDBServiceType = None
             gocSite = getGOCFTSName(elementName)
             if not gocSite["OK"]:
                 self.log.warn("FTS not in Resources/FTSEndpoints/FTS3 ?", elementName)
@@ -190,7 +199,10 @@ class DowntimeCommand(Command):
             ceType = gConfig.getValue(
                 cfgPath("Resources", "Sites", siteName.split(".")[0], siteName, "CEs", elementName, "CEType")
             )
-            gOCDBServiceType = diracToGOC_conversion[ceType]
+            try:
+                gOCDBServiceType = diracToGOC_conversion[ceType]
+            except KeyError:  # not a GOC type (e.g. SSH CE)
+                gOCDBServiceType = None
 
         return S_OK((element, elementName, hours, gOCDBServiceType))
 
