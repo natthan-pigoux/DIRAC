@@ -177,7 +177,7 @@ class TransformationClient(Client):
             timeStamp = "LastUpdate"
 
         if "LFN" not in condDict:
-            res = rpcClient.getTransformationFilesAsJsonString(
+            res = rpcClient.getTransformationFiles(
                 condDict, older, newer, timeStamp, orderAttribute, offset, maxfiles, columns
             )
             if not res["OK"]:
@@ -208,7 +208,7 @@ class TransformationClient(Client):
             # Apply the offset to the list of LFNs
             condDict["LFN"] = lfnList[offsetToApply : offsetToApply + limit]
             # No limit and no offset as the list is limited already
-            res = rpcClient.getTransformationFilesAsJsonString(
+            res = rpcClient.getTransformationFiles(
                 condDict, older, newer, timeStamp, orderAttribute, None, None, columns
             )
             if not res["OK"]:

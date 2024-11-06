@@ -1,18 +1,18 @@
 """ Service for interacting with TransformationDB
 """
 
-from DIRAC import S_OK, S_ERROR
+from DIRAC import S_ERROR, S_OK
+from DIRAC.ConfigurationSystem.Client.Helpers.Operations import Operations
 from DIRAC.Core.DISET.RequestHandler import RequestHandler
 from DIRAC.Core.Security.Properties import SecurityProperty
+from DIRAC.Core.Utilities.Decorators import deprecated
 from DIRAC.Core.Utilities.DEncode import ignoreEncodeWarning
 from DIRAC.Core.Utilities.JEncode import encode as jencode
 from DIRAC.Core.Utilities.ObjectLoader import ObjectLoader
-from DIRAC.ConfigurationSystem.Client.Helpers.Operations import Operations
+from DIRAC.RequestManagementSystem.Client.Operation import Operation
+from DIRAC.RequestManagementSystem.Client.Request import Request
 from DIRAC.TransformationSystem.Client import TransformationFilesStatus
 from DIRAC.WorkloadManagementSystem.Client import JobStatus
-from DIRAC.RequestManagementSystem.Client.Request import Request
-from DIRAC.RequestManagementSystem.Client.Operation import Operation
-
 
 TASKS_STATE_NAMES = ["TotalCreated", "Created"] + sorted(
     set(JobStatus.JOB_STATES) | set(Request.ALL_STATES) | set(Operation.ALL_STATES)
@@ -292,11 +292,10 @@ class TransformationManagerHandlerMixin:
         limit=None,
         offset=None,
         columns=None,
-        include_web_records=True,
     ):
         if not condDict:
             condDict = {}
-        return self.transformationDB.getTransformationFiles(
+        result = self.transformationDB.getTransformationFiles(
             condDict=condDict,
             older=older,
             newer=newer,
@@ -306,21 +305,21 @@ class TransformationManagerHandlerMixin:
             offset=offset,
             connection=False,
             columns=columns,
-            include_web_records=include_web_records,
         )
+
+        # DEncode cannot cope with nested structures of multiple millions items.
+        # Encode everything as a json string, that DEncode can then transmit faster.
+
+        return S_OK(jencode(result))
 
     types_getTransformationFilesAsJsonString = types_getTransformationFiles
 
+    @deprecated("Use getTransformationFiles instead")
     def export_getTransformationFilesAsJsonString(self, *args, **kwargs):
         """
-        DEncode cannot cope with nested structures of multiple millions items.
-        Encode everything as a json string, that DEncode can then transmit faster.
-
-        This will be the default as of v9.0
+        Deprecated call -- redirect to getTransformationFiles
         """
-        kwargs["include_web_records"] = False
-        res = self.export_getTransformationFiles(*args, **kwargs)
-        return S_OK(jencode(res))
+        return self.export_getTransformationFiles(*args, **kwargs)
 
     ####################################################################
     #
