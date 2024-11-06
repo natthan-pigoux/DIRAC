@@ -290,7 +290,7 @@ function installDIRACX() {
     if [[ -n "${DIRACX_CUSTOM_SOURCE_PREFIXES:-}" ]]; then
       wheels=( $(find "${DIRACX_CUSTOM_SOURCE_PREFIXES}" -name "diracx_${wheel_name}-*.whl") )
       if [[ ! ${#wheels[@]} -eq 1 ]]; then
-          echo "ERROR: Multiple wheels found for ${package_name} in ${dir}"
+          echo "ERROR: Multiple or no wheels found for ${wheel_name} in ${DIRACX_CUSTOM_SOURCE_PREFIXES}"
           exit 1
       fi
       pip install "${wheels[0]}"
