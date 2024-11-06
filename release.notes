@@ -1,3 +1,29 @@
+[v9.0.0a33]
+
+*Core
+
+CHANGE: (#7876) Remove lock in Logging._createLogRecord
+FIX: (#7864) Prevent `-1` returned from `oSocket.write` being interpreted as number of bytes to avoid an infinite loop in `DISET BaseTransport.sendData`.
+FIX: (#7856) ensure processProposal always returns "closeTransport" on error
+FIX: (#7843) Returning DISET responses with >100000000 bytes
+
+*ResourceStatusSystem
+
+FIX: (#7871) some protocols or types are not in GOC
+
+*TransformationSystem
+
+FIX: (#7865) getTasksToSubmit consider tasks inserted by 30 seconds or more
+NEW: (#7843) Use getTransformationFilesAsJsonString for faster getTransformationFiles
+
+*StompMQConnector
+
+FIX: (#7855) add a timeout for the StompConnector to handle nonresponsive sockets which can cause logging to be blocked
+
+*DataManagementSystem
+
+FIX: (#7850) Fix deadlock when FTS3Agent._treatOperation fails
+
 [v9.0.0a32]
 
 *Resources
