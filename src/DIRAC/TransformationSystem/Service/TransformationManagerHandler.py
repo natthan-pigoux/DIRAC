@@ -1,16 +1,18 @@
 """ Service for interacting with TransformationDB
 """
-from DIRAC import S_OK, S_ERROR
+
+from DIRAC import S_ERROR, S_OK
+from DIRAC.ConfigurationSystem.Client.Helpers.Operations import Operations
 from DIRAC.Core.DISET.RequestHandler import RequestHandler
 from DIRAC.Core.Security.Properties import SecurityProperty
+from DIRAC.Core.Utilities.Decorators import deprecated
 from DIRAC.Core.Utilities.DEncode import ignoreEncodeWarning
+from DIRAC.Core.Utilities.JEncode import encode as jencode
 from DIRAC.Core.Utilities.ObjectLoader import ObjectLoader
-from DIRAC.ConfigurationSystem.Client.Helpers.Operations import Operations
+from DIRAC.RequestManagementSystem.Client.Operation import Operation
+from DIRAC.RequestManagementSystem.Client.Request import Request
 from DIRAC.TransformationSystem.Client import TransformationFilesStatus
 from DIRAC.WorkloadManagementSystem.Client import JobStatus
-from DIRAC.RequestManagementSystem.Client.Request import Request
-from DIRAC.RequestManagementSystem.Client.Operation import Operation
-
 
 TASKS_STATE_NAMES = ["TotalCreated", "Created"] + sorted(
     set(JobStatus.JOB_STATES) | set(Request.ALL_STATES) | set(Operation.ALL_STATES)
@@ -293,7 +295,7 @@ class TransformationManagerHandlerMixin:
     ):
         if not condDict:
             condDict = {}
-        return self.transformationDB.getTransformationFiles(
+        result = self.transformationDB.getTransformationFiles(
             condDict=condDict,
             older=older,
             newer=newer,
@@ -304,6 +306,20 @@ class TransformationManagerHandlerMixin:
             connection=False,
             columns=columns,
         )
+
+        # DEncode cannot cope with nested structures of multiple millions items.
+        # Encode everything as a json string, that DEncode can then transmit faster.
+
+        return S_OK(jencode(result))
+
+    types_getTransformationFilesAsJsonString = types_getTransformationFiles
+
+    @deprecated("Use getTransformationFiles instead")
+    def export_getTransformationFilesAsJsonString(self, *args, **kwargs):
+        """
+        Deprecated call -- redirect to getTransformationFiles
+        """
+        return self.export_getTransformationFiles(*args, **kwargs)
 
     ####################################################################
     #

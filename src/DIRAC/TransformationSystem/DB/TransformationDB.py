@@ -632,12 +632,8 @@ class TransformationDB(DB):
             return res
 
         resultList = [dict(zip(columns, row)) for row in res["Value"]]
-        webList = [[str(item) if not isinstance(item, int) else item for item in row] for row in res["Value"]]
 
-        result = S_OK(resultList)
-        result["Records"] = webList
-        result["ParameterNames"] = columns
-        return result
+        return S_OK(resultList)
 
     def getFileSummary(self, lfns, connection=False):
         """Get file status summary in all the transformations"""
@@ -888,13 +884,9 @@ class TransformationDB(DB):
             return res
         if condDict is None:
             condDict = {}
-        webList = []
         resultList = []
         for row in res["Value"]:
-            # Prepare the structure for the web
-            rList = [str(item) if not isinstance(item, int) else item for item in row]
             taskDict = dict(zip(self.TASKSPARAMS, row))
-            webList.append(rList)
             if inputVector:
                 taskDict["InputVector"] = ""
                 taskID = taskDict["TaskID"]
@@ -907,7 +899,6 @@ class TransformationDB(DB):
                     return res
             resultList.append(taskDict)
         result = S_OK(resultList)
-        result["Records"] = webList
         result["ParameterNames"] = self.TASKSPARAMS
         return result
 
