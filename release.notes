@@ -1,3 +1,9 @@
+[v9.0.0a34]
+
+*DataManagementSystem
+
+FIX: (#7879) Fix the condition for return type sanitation
+
 [v9.0.0a33]
 
 *Core
