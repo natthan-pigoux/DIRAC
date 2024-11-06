@@ -1,6 +1,7 @@
 """ Collection of user jobs for testing purposes
 """
 # pylint: disable=wrong-import-position, invalid-name
+import sys
 import time
 import unittest
 
@@ -22,7 +23,29 @@ class GridSubmissionTestCase(unittest.TestCase):
     """Base class for the Regression test cases"""
 
     def setUp(self):
-        pass
+        result = getProxyInfo()
+        if result["Value"]["group"] not in ["dteam_user", "gridpp_user"]:
+            print("GET A USER GROUP")
+            sys.exit(1)
+
+        res = DataManager().getReplicas(
+            [
+                "/dteam/user/f/fstagni/test/testInputFileSingleLocation.txt",
+                "/dteam/user/f/fstagni/test/testInputFile.txt",
+            ]
+        )
+        if not res["OK"]:
+            print(f"DATAMANAGER.getRepicas failure: {res['Message']}")
+            sys.exit(1)
+        if res["Value"]["Failed"]:
+            print(f"DATAMANAGER.getRepicas failed for something: {res['Value']['Failed']}")
+            sys.exit(1)
+
+        replicas = res["Value"]["Successful"]
+        if list(replicas["/dteam/user/f/fstagni/test/testInputFile.txt"]) != ["RAL-SE", "UKI-LT2-IC-HEP-disk"]:
+            print("/dteam/user/f/fstagni/test/testInputFile.txt locations are not correct")
+        if list(replicas["/dteam/user/f/fstagni/test/testInputFileSingleLocation.txt"]) != ["RAL-SE"]:
+            print("/dteam/user/f/fstagni/test/testInputFileSingleLocation.txt locations are not correct")
 
     def tearDown(self):
         pass
@@ -38,6 +61,14 @@ class submitSuccess(GridSubmissionTestCase):
         jobsSubmittedList.append(res["Value"])
 
         res = helloWorldJenkins()
+        self.assertTrue(res["OK"])
+        jobsSubmittedList.append(res["Value"])
+
+        res = helloWorld_input()
+        self.assertTrue(res["OK"])
+        jobsSubmittedList.append(res["Value"])
+
+        res = helloWorld_input_single()
         self.assertTrue(res["OK"])
         jobsSubmittedList.append(res["Value"])
 
@@ -93,6 +124,10 @@ class submitSuccess(GridSubmissionTestCase):
         self.assertTrue(res["OK"])
         jobsSubmittedList.append(res["Value"])
 
+        res = parametricJobInputData()
+        self.assertTrue(res["OK"])
+        jobsSubmittedList.append(res["Value"])
+
         res = jobWithOutput()
         self.assertTrue(res["OK"])
         jobsSubmittedList.append(res["Value"])
@@ -104,45 +139,6 @@ class submitSuccess(GridSubmissionTestCase):
         print(f"submitted {len(jobsSubmittedList)} jobs: {','.join(str(js) for js in jobsSubmittedList)}")
 
 
-# FIXME: This is also in the extension...? To try!
-# class monitorSuccess( GridSubmissionTestCase ):
-#
-#   def test_monitor( self ):
-#
-#     toRemove = []
-#     fail = False
-#
-#     # we will check every 10 minutes, up to 6 hours
-#     counter = 0
-#     while counter < 36:
-#       jobStatus = self.dirac.status( jobsSubmittedList )
-#       self.assertTrue( jobStatus['OK'] )
-#       for jobID in jobsSubmittedList:
-#         status = jobStatus['Value'][jobID]['Status']
-#         minorStatus = jobStatus['Value'][jobID]['MinorStatus']
-#         if status == 'Done':
-#           self.assertTrue( minorStatus in ['Execution Complete', 'Requests Done'] )
-#           jobsSubmittedList.remove( jobID )
-#           res = self.dirac.getJobOutputLFNs( jobID )
-#           if res['OK']:
-#             lfns = res['Value']
-#             toRemove += lfns
-#         if status in ['Failed', 'Killed', 'Deleted']:
-#           fail = True
-#           jobsSubmittedList.remove( jobID )
-#       if jobsSubmittedList:
-#         time.sleep( 600 )
-#         counter = counter + 1
-#       else:
-#         break
-#
-#     # removing produced files
-#     res = self.dirac.removeFile( toRemove )
-#     self.assertTrue( res['OK'] )
-#
-#     if fail:
-#       self.assertFalse( True )
-
 #############################################################################
 # Test Suite run
 #############################################################################
@@ -150,5 +146,4 @@ class submitSuccess(GridSubmissionTestCase):
 if __name__ == "__main__":
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(GridSubmissionTestCase)
     suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(submitSuccess))
-    # suite.addTest( unittest.defaultTestLoader.loadTestsFromTestCase( monitorSuccess ) )
     testResult = unittest.TextTestRunner(verbosity=2).run(suite)
