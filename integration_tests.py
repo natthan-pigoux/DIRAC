@@ -23,8 +23,8 @@ from typer import colors as c
 
 # Editable configuration
 DEFAULT_HOST_OS = "el9"
-DEFAULT_MYSQL_VER = "mysql:8.0.36"
-DEFAULT_ES_VER = "opensearchproject/opensearch:2.11.1"
+DEFAULT_MYSQL_VER = "mysql:8.0.40"
+DEFAULT_ES_VER = "opensearchproject/opensearch:2.18.0"
 DEFAULT_IAM_VER = "indigoiam/iam-login-service:v1.8.0"
 FEATURE_VARIABLES = {
     "DIRACOSVER": "master",
