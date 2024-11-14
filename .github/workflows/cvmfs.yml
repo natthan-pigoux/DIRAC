@@ -13,6 +13,7 @@ jobs:
           channel-priority: true
           activate-environment: anaconda-client-env
           auto-update-conda: true
+          conda-solver: classic
       - name: Deploy on CVMFS
         env:
           CVMFS_PROXY_BASE64: ${{ secrets.CVMFS_PROXY_BASE64 }}
