@@ -144,6 +144,11 @@ Resources
 }
 """
 
+mockPMProxy = MagicMock()
+mockPMProxy.dumpAllToString.return_value = {"OK": True, "Value": "fakeProxy"}
+mockPMProxyReply = MagicMock()
+mockPMProxyReply.return_value = {"OK": True, "Value": mockPMProxy}
+
 
 @pytest.fixture
 def config():
@@ -169,6 +174,9 @@ def sd(mocker, config):
     )
     mocker.patch(
         "DIRAC.WorkloadManagementSystem.Agent.SiteDirector.ResourceStatus.getElementStatus", return_values=usableSites
+    )
+    mocker.patch(
+        "DIRAC.WorkloadManagementSystem.Agent.SiteDirector.gProxyManager.downloadProxy", side_effect=mockPMProxyReply
     )
     sd = SiteDirector()
 
