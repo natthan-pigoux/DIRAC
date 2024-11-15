@@ -11,7 +11,6 @@ jobs:
         with:
           channels: conda-forge,defaults
           channel-priority: true
-          activate-environment: ""
           auto-activate-base: true
       - name: Deploy on CVMFS
         env:
