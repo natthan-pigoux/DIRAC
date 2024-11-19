@@ -785,9 +785,8 @@ def _make_env(flags):
     env["ES_VER"] = flags.pop("ES_VER", DEFAULT_ES_VER)
     env["IAM_VER"] = flags.pop("IAM_VER", DEFAULT_IAM_VER)
     if "CVMFS_DIR" not in env or not Path(env["CVMFS_DIR"]).is_dir():
-        # create a directory in tmp
-        with tempfile.TemporaryDirectory() as tmpdir:
-            env["CVMFS_DIR"] = tmpdir
+        typer.secho(f"CVMFS_DIR environment value: {env.get('CVMFS_DIR', 'NOT SET')}", fg=c.YELLOW)
+        env["CVMFS_DIR"] = "/tmp"
     return env
 
 

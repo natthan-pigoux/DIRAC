@@ -115,17 +115,26 @@ services:
     command: ["sleep", "infinity"] # This is necessary because of the issue described in https://github.com/moby/moby/issues/42275. What is added here is a hack/workaround.
 
   dirac-pilot:
-    image: registry.cern.ch/cernvm/five/cernvm-five
+    image: ${CI_REGISTRY_IMAGE}/${HOST_OS}-dirac
     container_name: pilot
     hostname: pilot
     user: "${DIRAC_UID}:${DIRAC_GID}"
     depends_on:
       - dirac-server
     volumes:
-      - ${CVMFS_DIR}:/cvmfs:ro
+      - type: bind
+        source: ${CVMFS_DIR}
+        target: /cvmfs
+        bind:
+          propagation: rslave
     ulimits:
       nofile: 8192
     pull_policy: always
+    healthcheck:
+      test: ["CMD", "ls", "${CVMFS_DIR}"]
+      timeout: 20s
+      retries: 10
+      start_period: 60s
     command: ["sleep", "infinity"] # This is necessary because of the issue described in https://github.com/moby/moby/issues/42275. What is added here is a hack/workaround.
 
   diracx-init-key:
