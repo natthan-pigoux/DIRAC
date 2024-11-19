@@ -23,8 +23,8 @@ from typer import colors as c
 
 # Editable configuration
 DEFAULT_HOST_OS = "el9"
-DEFAULT_MYSQL_VER = "mysql:8.0.36"
-DEFAULT_ES_VER = "opensearchproject/opensearch:2.11.1"
+DEFAULT_MYSQL_VER = "mysql:8.0.40"
+DEFAULT_ES_VER = "opensearchproject/opensearch:2.18.0"
 DEFAULT_IAM_VER = "indigoiam/iam-login-service:v1.8.0"
 FEATURE_VARIABLES = {
     "DIRACOSVER": "master",
@@ -288,7 +288,8 @@ def prepare_environment(
         subprocess.run(cmd + ["chown", "dirac", "/home/dirac"], check=True)
 
     typer.secho("Creating MySQL user", fg=c.GREEN)
-    cmd = ["docker", "exec", "mysql", "mysql", f"--password={DB_ROOTPWD}", "-e"]
+    mysql_command = "mariadb" if "mariadb" in docker_compose_env["MYSQL_VER"].lower() else "mysql"
+    cmd = ["docker", "exec", "mysql", f"{mysql_command}", f"--password={DB_ROOTPWD}", "-e"]
     # It sometimes takes a while for MySQL to be ready so wait for a while if needed
     for _ in range(10):
         ret = subprocess.run(
@@ -777,6 +778,10 @@ def _make_env(flags):
     env["HOST_OS"] = flags.pop("HOST_OS", DEFAULT_HOST_OS)
     env["CI_REGISTRY_IMAGE"] = flags.pop("CI_REGISTRY_IMAGE", "diracgrid")
     env["MYSQL_VER"] = flags.pop("MYSQL_VER", DEFAULT_MYSQL_VER)
+    if "mariadb" in env["MYSQL_VER"].lower():
+        env["MYSQL_ADMIN_COMMAND"] = "mariadb-admin"
+    else:
+        env["MYSQL_ADMIN_COMMAND"] = "mysqladmin"
     env["ES_VER"] = flags.pop("ES_VER", DEFAULT_ES_VER)
     env["IAM_VER"] = flags.pop("IAM_VER", DEFAULT_IAM_VER)
     if "CVMFS_DIR" not in env or not Path(env["CVMFS_DIR"]).is_dir():
