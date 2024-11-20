@@ -13,8 +13,6 @@ This section allows to configure options concerning to:
 - Virtual Organization special parameters
 - Component Monitoring
 
-In the short term, most of this schema will be moved into [vo]/[setup] dependent sections in order to allow better support for multi-VO installations.
-
 .. toctree::
    :maxdepth: 2
 

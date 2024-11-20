@@ -239,14 +239,6 @@ The installation created the file ``/opt/dirac/etc/dirac.cfg``. The content is t
     Security
     {
     }
-    Setups
-    {
-      MyDIRAC-Production
-      {
-        Configuration = Production
-        Framework = Production
-      }
-    }
     Configuration
     {
       Master = yes

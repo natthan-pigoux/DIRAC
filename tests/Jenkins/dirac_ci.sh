@@ -347,7 +347,7 @@ fullInstallDIRAC() {
   python "${TESTCODE}/DIRAC/tests/Jenkins/dirac-cfg-update-services.py" "${DEBUG}"
 
   #fix the SandboxStore and other stuff
-  python "${TESTCODE}/DIRAC/tests/Jenkins/dirac-cfg-update-server.py" dirac-JenkinsSetup "${DEBUG}"
+  python "${TESTCODE}/DIRAC/tests/Jenkins/dirac-cfg-update-server.py" "${DEBUG}"
 
   echo "==> Restarting Tornado Tornado"
   dirac-restart-component Tornado Tornado ${DEBUG}

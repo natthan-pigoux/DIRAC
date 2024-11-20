@@ -29,7 +29,6 @@
         python -m pytest -c ../pytest.ini  -vv tests/Integration/WorkloadManagementSystem/Test_SandboxStoreClient.py
 """
 
-from diraccfg import CFG
 
 import DIRAC
 
@@ -39,28 +38,6 @@ from DIRAC import gLogger
 from DIRAC.tests.Utilities.utils import find_all
 from DIRAC.WorkloadManagementSystem.Client.SandboxStoreClient import SandboxStoreClient
 
-# cfg = CFG()
-# cfg.loadFromBuffer(
-#     """
-# Systems
-# {
-#   WorkloadManagement
-#   {
-#     dirac-JenkinsSetup
-#     {
-#       Services
-#       {
-#         SandboxStore
-#         {
-#           BasePath = /scratch/
-#         }
-#       }
-#     }
-#   }
-# }
-# """
-# )
-# gConfig.loadCFG(cfg)
 
 gLogger.setLevel("DEBUG")
 

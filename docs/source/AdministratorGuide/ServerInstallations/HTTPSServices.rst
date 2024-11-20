@@ -30,15 +30,6 @@ All other services can follow the standard procedure described below.
 
 First, the following configuration subsections have to be added to CS::
 
-  # "Main" section
-  DIRAC
-  {
-    Setups
-    {
-      ...
-      Tornado = Production  # "Production" is common here, for your setup what follow what's already there for the other systems
-    }
-  }
 
   # Add Tornado to Systems section
   Systems

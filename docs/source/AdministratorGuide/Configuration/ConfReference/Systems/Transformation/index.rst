@@ -2,7 +2,7 @@ Transformation System configuration
 =========================================
 
 In this subsection are described the databases, services, agents, and URLs related to
-Transformation System for each setup.
+Transformation System.
 
 .. toctree::
    :maxdepth: 2

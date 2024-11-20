@@ -102,32 +102,19 @@ How to start server
 
 The easy way is to use command ``tornado-start-all`` which will start all services registered in configuration. To register a service you just have to add the service in the CS and ``Protocol = https``. It may look like this::
 
-  DIRAC
-  {
-    Setups
-    {
-      Tornado = DevInstance
-    }
-  }
 
   Systems {
     Tornado
     {
-      DevInstance
-      {
-        Port = 443
-      }
+      Port = 443
     }
     Framework
     {
-      DevInstance
+      Services
       {
-        Services
+        DummyTornado
         {
-          DummyTornado
-          {
-            Protocol = https
-          }
+          Protocol = https
         }
       }
     }

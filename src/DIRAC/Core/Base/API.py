@@ -65,7 +65,6 @@ class API:
         self.pPrint = pprint.PrettyPrinter()
         # Global error dictionary
         self.errorDict = {}
-        self.setup = gConfig.getValue("/DIRAC/Setup", "Unknown")
         self.diracInfo = getCurrentVersion()["Value"]
         self._siteSet = set(getSites().get("Value", []))
 

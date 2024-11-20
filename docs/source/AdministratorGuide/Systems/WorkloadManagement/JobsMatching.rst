@@ -28,7 +28,6 @@ The JobAgent running on the Worker Node and started by the pilot presents capabi
      Platform:              x86_64_glibc-2.21
      ReleaseProject:        VO
      ReleaseVersion:        7.2.13
-     Setup:                 VO-Certification
      Site:                  DIRAC.somewhere.org
      Tag:                   GPU
    }
@@ -42,7 +41,6 @@ An example of requirements include the following::
   [
     Owner = "user_x";
     VirtualOrganization = "VO";
-    Setup = "VO-Certification";
     CPUTime = 17800;
     OwnerGroup = "user";
     UserPriority = 1;

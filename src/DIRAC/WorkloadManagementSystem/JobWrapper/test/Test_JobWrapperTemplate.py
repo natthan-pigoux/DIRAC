@@ -62,17 +62,10 @@ def extraOptions():
 
     localCfg = CFG()
     localCfg.createNewSection("DIRAC")
-    localCfg.setOption("/DIRAC/Setup", "Test")
 
-    localCfg.createNewSection("/DIRAC/Setups")
-    localCfg.createNewSection("/DIRAC/Setups/Test")
-    localCfg.setOption("/DIRAC/Setups/Test/WorkloadManagement", "Test")
-    localCfg.setOption("/DIRAC/Setups/Test/RequestManagement", "Test")
-
-    localCfg.createNewSection("Systems")
-    localCfg.createNewSection("/Systems/Test")
-    localCfg.createNewSection("/Systems/Test/WorkloadManagement")
-    localCfg.createNewSection("/Systems/Test/WorkloadManagement/JobWrapper")
+    localCfg.createNewSection("/Systems")
+    localCfg.createNewSection("/Systems/WorkloadManagement")
+    localCfg.createNewSection("/Systems/WorkloadManagement/JobWrapper")
 
     localCfg.writeToFile(extraOptions)
     yield extraOptions
@@ -205,7 +198,6 @@ def test_createAndExecuteJobWrapperTemplate_missingExtraOptions():
     os.chmod(jobExecutablePath, 0o755)
     result = subprocess.run(jobExecutablePath, shell=True, capture_output=True)
     assert result.returncode == 1, result.stderr
-    assert b"Missing mandatory local configuration option /DIRAC/Setup" in result.stdout, result.stdout
     assert result.stderr == b"", result.stderr
 
     # This is the default wrapper path

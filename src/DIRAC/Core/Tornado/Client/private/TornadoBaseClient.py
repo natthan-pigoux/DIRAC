@@ -23,28 +23,25 @@
 """
 
 # pylint: disable=broad-except
-import io
 import errno
+import io
 import os
-import requests
 import ssl
 import tempfile
 from http import HTTPStatus
 
+import requests
 
-from DIRAC import S_OK, S_ERROR, gLogger
-from DIRAC.Core.Utilities.ReturnValues import convertToReturnValue
-
+from DIRAC import S_ERROR, S_OK, gLogger
 from DIRAC.ConfigurationSystem.Client.Config import gConfig
 from DIRAC.ConfigurationSystem.Client.Helpers.CSGlobals import skipCACheck
 from DIRAC.ConfigurationSystem.Client.Helpers.Registry import findDefaultGroupForDN
-from DIRAC.ConfigurationSystem.Client.PathFinder import getServiceURLs, getGatewayURLs
-
+from DIRAC.ConfigurationSystem.Client.PathFinder import getGatewayURLs, getServiceURLs
 from DIRAC.Core.DISET.ThreadConfig import ThreadConfig
 from DIRAC.Core.Security import Locations
 from DIRAC.Core.Utilities import Network
 from DIRAC.Core.Utilities.JEncode import decode, encode
-
+from DIRAC.Core.Utilities.ReturnValues import convertToReturnValue
 
 # TODO CHRIS: refactor all the messy `discover` methods
 # I do not do it now because I want first to decide
@@ -63,7 +60,6 @@ class TornadoBaseClient:
     KW_USE_CERTIFICATES = "useCertificates"
     KW_EXTRA_CREDENTIALS = "extraCredentials"
     KW_TIMEOUT = "timeout"
-    KW_SETUP = "setup"
     KW_VO = "VO"
     KW_DELEGATED_DN = "delegatedDN"
     KW_DELEGATED_GROUP = "delegatedGroup"
@@ -72,7 +68,6 @@ class TornadoBaseClient:
     KW_PROXY_STRING = "proxyString"
     KW_PROXY_CHAIN = "proxyChain"
     KW_SKIP_CA_CHECK = "skipCACheck"
-    KW_KEEP_ALIVE_LAPSE = "keepAliveLapse"
 
     def __init__(self, serviceName, **kwargs):
         """
@@ -80,7 +75,6 @@ class TornadoBaseClient:
         :param useCertificates: If set to True, use the server certificate
         :param extraCredentials:
         :param timeout: Timeout of the call (default 600 s)
-        :param setup: Specify the Setup
         :param VO: Specify the VO
         :param delegatedDN: Not clear what it can be used for.
         :param delegatedGroup: Not clear what it can be used for.
@@ -106,9 +100,7 @@ class TornadoBaseClient:
         self.__useAccessToken = None
         self.__useCertificates = None
         # The CS useServerCertificate option can be overridden by explicit argument
-        self.__forceUseCertificates = self.kwargs.get(self.KW_USE_CERTIFICATES)
         self.__initStatus = S_OK()
-        self.__idDict = {}
         self.__extraCredentials = ""
         # by default we always have 1 url for example:
         # RPCClient('dips://volhcb38.cern.ch:9162/Framework/SystemAdministrator')

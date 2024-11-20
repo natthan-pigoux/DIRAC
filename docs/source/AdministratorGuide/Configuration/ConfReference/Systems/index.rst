@@ -25,7 +25,7 @@ Each DIRAC system has its corresponding section in the Configuration namespace.
 Default structure
 -----------------
 
-In each system, per setup, you normally find the following sections:
+In each system you normally find the following sections:
 
 * Agents: definition of each agent
 * Services: definition of each service

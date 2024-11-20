@@ -39,7 +39,7 @@ All procedure have a list of required :mod:`~DIRAC.Core.Security.Properties` and
 There are two main ways to define required properties:
 
 - "Hardcoded" way: Directly in the code, in your request handler you can write ```auth_yourMethodName = listOfProperties```. It can be useful for development or to provide default values.
-- Via the configuration system at ```/DIRAC/Systems/(SystemName)/(InstanceName)/Services/(ServiceName)/Authorization/(methodName)```, if you have also define hardcoded properties, hardcoded properties will be ignored.
+- Via the configuration system at ```/DIRAC/Systems/(SystemName)/Services/(ServiceName)/Authorization/(methodName)```, if you have also define hardcoded properties, hardcoded properties will be ignored.
 
 A complete list of properties is available in :ref:`systemAuthorization`.
 If you don't want to define specific properties you can use "authenticated", "any" and "all".

@@ -2,18 +2,6 @@ LocalSite
 {
   Site = DIRAC.DevBox.org
 }
-DIRAC
-{
-  Setup = DeveloperSetup
-  Setups
-  {
-    DeveloperSetup
-    {
-      Framework = DevInstance
-      Test = DevInstance
-    }
-  }
-}
 Systems
 {
   Database

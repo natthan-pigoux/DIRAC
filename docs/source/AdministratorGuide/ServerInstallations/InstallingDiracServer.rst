@@ -256,10 +256,7 @@ be taken based on the Python version you wish to install.
         VirtualOrganization = Name of your VO
         #  Site name
         SiteName = DIRAC.HostName.ch
-        #  Setup name
-        Setup = MyDIRAC-Production
-        #  Default name of system instances
-        InstanceName = Production
+
         #  Flag to skip download of CAs, on the first Server of your installation you need to get CAs
         #  installed by some external means
         SkipCADownload = yes
@@ -428,10 +425,6 @@ operation is the registration of the new host in the already functional Configur
         VirtualOrganization = Name of your VO
         #  Site name
         SiteName = DIRAC.HostName2.ch
-        #  Setup name
-        Setup = MyDIRAC-Production
-        #  Default name of system instances
-        InstanceName = Production
         #  Flag to use the server certificates
         UseServerCertificate = yes
         #  Configuration Server URL (This should point to the URL of at least one valid Configuration

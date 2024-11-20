@@ -20,8 +20,6 @@ Installation
 The service constitutes of one database (InstalledComponentsDB) and one service (Framework/ComponentMonitoring).
 These service and DB may have been installed already when DIRAC was installed the first time.
 
-The script ``dirac-populate-component-db`` should then be used to populate the DB tables with the necessary information.
-
 
 Interacting with the static component monitoring
 ------------------------------------------------

@@ -52,7 +52,6 @@ Installation configuration::
     Services = Framework/SystemAdministrator
     UseServerCertificate = yes
     SkipCADownload = yes
-    Setup = your setup # for example: LHCb-Certification
     ConfigurationMaster = no
     ConfigurationServer = your configuration service
   }
@@ -111,7 +110,6 @@ Make sure that the configuration /opt/dirac/pro/etc/dirac.cfg file is correct. I
 
   DIRAC
   {
-    Setup = LHCb-Certification
     Configuration
     {
       Servers =
@@ -120,14 +118,6 @@ Make sure that the configuration /opt/dirac/pro/etc/dirac.cfg file is correct. I
     {
     }
     Extensions = WebApp
-    Setups
-    {
-      LHCb-Certification
-      {
-        Configuration = LHCb-Certification
-        Framework = LHCb-Certification
-      }
-    }
   }
 
 Update using :ref:`dirac-admin-sysadmin-cli <dirac-admin-sysadmin-cli>`.

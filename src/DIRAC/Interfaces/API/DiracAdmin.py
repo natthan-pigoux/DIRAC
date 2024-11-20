@@ -259,65 +259,6 @@ class DiracAdmin(API):
         return result
 
     #############################################################################
-    def getServicePorts(self, setup="", printOutput=False):
-        """Checks the service ports for the specified setup.  If not given this is
-        taken from the current installation (/DIRAC/Setup)
-
-        Example usage:
-
-          >>> gLogger.notice(diracAdmin.getServicePorts())
-          {'OK': True, 'Value':''}
-
-        :return: S_OK,S_ERROR
-
-        """
-        if not setup:
-            setup = gConfig.getValue("/DIRAC/Setup", "")
-
-        setupList = gConfig.getSections("/DIRAC/Setups", [])
-        if not setupList["OK"]:
-            return S_ERROR("Could not get /DIRAC/Setups sections")
-        setupList = setupList["Value"]
-        if setup not in setupList:
-            return S_ERROR(f"Setup {setup} is not in allowed list: {', '.join(setupList)}")
-
-        serviceSetups = gConfig.getOptionsDict(f"/DIRAC/Setups/{setup}")
-        if not serviceSetups["OK"]:
-            return S_ERROR(f"Could not get /DIRAC/Setups/{setup} options")
-        serviceSetups = serviceSetups["Value"]  # dict
-        systemList = gConfig.getSections("/Systems")
-        if not systemList["OK"]:
-            return S_ERROR("Could not get Systems sections")
-        systemList = systemList["Value"]
-        result = {}
-        for system in systemList:
-            if system in serviceSetups:
-                path = f"/Systems/{system}/{serviceSetups[system]}/Services"
-                servicesList = gConfig.getSections(path)
-                if not servicesList["OK"]:
-                    self.log.warn(f"Could not get sections in {path}")
-                else:
-                    servicesList = servicesList["Value"]
-                    if not servicesList:
-                        servicesList = []
-                    self.log.verbose(f"System: {system} ServicesList: {', '.join(servicesList)}")
-                    for service in servicesList:
-                        spath = f"{path}/{service}/Port"
-                        servicePort = gConfig.getValue(spath, 0)
-                        if servicePort:
-                            self.log.verbose(f"Found port for {system}/{service} = {servicePort}")
-                            result[f"{system}/{service}"] = servicePort
-                        else:
-                            self.log.warn(f"No port found for {spath}")
-            else:
-                self.log.warn(f"{system} is not defined in /DIRAC/Setups/{setup}")
-
-        if printOutput:
-            gLogger.notice(self.pPrint.pformat(result))
-
-        return S_OK(result)
-
-    #############################################################################
     def getProxy(self, userDN, userGroup, validity=43200, limited=False):
         """Retrieves a proxy with default 12hr validity and stores
         this in a file in the local directory by default.

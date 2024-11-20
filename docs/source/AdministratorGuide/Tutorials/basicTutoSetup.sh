@@ -118,8 +118,6 @@ LocalInstallation
   SiteName = dirac-tuto
   # Setup name
   Setup = MyDIRAC-Production
-  #  Default name of system instances
-  InstanceName = Production
   #  Flag to skip download of CAs
   SkipCADownload = yes
   #  Flag to use the server certificates
