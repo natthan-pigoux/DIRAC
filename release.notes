@@ -1,3 +1,35 @@
+[v9.0.0a36]
+
+*TransformationSystem
+
+CHANGE: (#7906) the TransformationCleaningAgent forces jobs to KILLED
+
+*WorkloadManagementSystem
+
+NEW: (#7905) for parametric jobs, added the possibility to bulk insert records in JobLoggingDB
+CHANGE: (#7902) added ulimit -n 1048575 to pilotwrapper content
+
+*FrameworkSystem
+
+CHANGE: (#7901) Rename TokenManager service classes to follow standard convention for tornado and diset handlers
+
+Thank you for writing the text to appear in the release notes. It will show up
+exactly as it appears between the two bold lines
+Please follow the template:
+
+*CI
+
+NEW: (#7899) Add `PilotLogsDB` to `diracx` environment to allow CI testing.
+For examples look into release.notes
+
+*Misc
+
+FIX: (#7893) Tidy up whitespace in cvmfs.yml
+
+*WorkloadManagement
+
+CHANGE: (#7892) Use plain proxy for the pilot bundle
+
 [v9.0.0a35]
 [v9.0.0a34]
 
