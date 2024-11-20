@@ -22,8 +22,8 @@ from DIRAC.Core.Utilities.JEncode import strToIntDict
 from DIRAC.Core.Utilities.ObjectLoader import ObjectLoader
 from DIRAC.FrameworkSystem.Client.ProxyManagerClient import gProxyManager
 from DIRAC.StorageManagementSystem.Client.StorageManagerClient import StorageManagerClient
-from DIRAC.WorkloadManagementSystem.Client.JobStatus import filterJobStateTransition
 from DIRAC.WorkloadManagementSystem.Client import JobStatus
+from DIRAC.WorkloadManagementSystem.Client.JobStatus import filterJobStateTransition
 from DIRAC.WorkloadManagementSystem.Service.JobPolicy import (
     RIGHT_DELETE,
     RIGHT_KILL,
@@ -169,6 +169,9 @@ class JobManagerHandlerMixin:
             jobDescList = [jobDesc]
 
         jobIDList = []
+        statusList = []
+        minorStatusList = []
+        timeStampList = []
 
         if parametricJob:
             initialStatus = JobStatus.SUBMITTING
@@ -206,13 +209,25 @@ class JobManagerHandlerMixin:
                 return result
 
             jobID = result["JobID"]
-            self.log.info(f'Job added to the JobDB", "{jobID} for {self.owner}/{self.ownerGroup}')
-
-            self.jobLoggingDB.addLoggingRecord(
-                jobID, result["Status"], result["MinorStatus"], date=result["TimeStamp"], source="JobManager"
-            )
+            self.log.info(f"Job added to the JobDB", f"{jobID} for {self.owner}/{self.ownerGroup}")
 
             jobIDList.append(jobID)
+            statusList.append(result["Status"])
+            minorStatusList.append(result["MinorStatus"])
+            timeStampList.append(result["TimeStamp"])
+
+        # insert records in logging DB
+
+        # For parametric jobs I can insert logging records in a bulk
+        if parametricJob and len(set(jobIDList)) == len(jobIDList):
+            result = self.jobLoggingDB.addLoggingRecord(
+                jobIDList, statusList, minorStatusList, date=timeStampList, source="JobManager"
+            )
+        else:
+            for jobID, status, minorStatus, timeStamp in zip(jobIDList, statusList, minorStatusList, timeStampList):
+                result = self.jobLoggingDB.addLoggingRecord(
+                    jobID, status, minorStatus, date=timeStamp, source="JobManager"
+                )
 
         if parametricJob:
             result = S_OK(jobIDList)
