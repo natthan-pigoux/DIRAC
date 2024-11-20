@@ -242,12 +242,6 @@ def initialize(
         # Restore the pre-existing log level
         gLogger.setLevel(log_level)
 
-    if not gConfigurationData.extractOptionFromCFG("/DIRAC/Setup"):
-        message = '/DIRAC/Setup is not defined. Have you ran "dirac-configure"?'
-        if require_auth:
-            raise exceptions.NotConfiguredError(message)
-        warnings.warn(message, exceptions.DiracWarning)
-
     if require_auth:
         retVal = S_ERROR("No configuration servers found")
         for url in List.randomize(gConfigurationData.getServers()):

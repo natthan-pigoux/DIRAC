@@ -10,8 +10,7 @@ Script.setUsageMessage("\n".join([__doc__.split("\n")[1], "Usage:", f"  {Script.
 
 Script.parseCommandLine()
 
-args = Script.getPositionalArgs()
-setupName = args[0]
+setupName = "dirac-JenkinsSetup"
 
 # Where to store outputs
 if not os.path.isdir(f"{setupName}/sandboxes"):

@@ -112,8 +112,6 @@ class Script:
             cls.scriptName = script
         cls.localCfg.setConfigurationForScript(cls.scriptName)
 
-        if not ignoreErrors:
-            cls.localCfg.addMandatoryEntry("/DIRAC/Setup")
         resultDict = cls.localCfg.loadUserData()
         if not ignoreErrors and not resultDict["OK"]:
             gLogger.error("There were errors when loading configuration", resultDict["Message"])

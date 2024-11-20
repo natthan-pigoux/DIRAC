@@ -32,22 +32,8 @@ And then there are databases, which keep the persistent state of a *System*.
 They are accessed by Services and Agents as a kind of shared memory.
 
 To achieve a functional DIRAC installation, cooperation of different *Systems* is required.
-A set of *Systems* providing a complete functionality to the end user form a DIRAC *Setup*.
-All DIRAC client installations will point to a particular DIRAC *Setup*. *Setups* can span
-multiple server installations. Each server installation belongs to a DIRAC *Instance* that can
-be shared by multiple *Setups*.
-
-A *Setup* is the highest level of the DIRAC component hierarchy. *Setups* are combining
-together instances of *Systems*. Within a given installation there may be several *Setups*.
-For example, there can be "Production" *Setup* together with "Test" or "Certification"
-*Setups* used for development and testing of the new functionality. An instance of a *System*
-can belong to one or more *Setups*, in other words, different *Setups* can share some *System*
-instances. Multiple *Setups* for the given community share the same Configuration information
-which allows them to access the same computing resources.
-
-Each *System* and *Setup* instance has a distinct name. The mapping of *Systems* to
-*Setups* is described in the Configuration of the DIRAC installation in the "/DIRAC/Setups"
-section.
+A set of *Systems* provide a complete functionality to the end user.
+Each *System* instance has a distinct name.
 
 .. image:: ../../_static/setup_structure.png
    :alt: DIRAC setup structure illustration (source https://github.com/TaykYoku/DIRACIMGS/raw/main/DIRAC_Setup_structure.ai)

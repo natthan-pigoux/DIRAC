@@ -44,9 +44,6 @@ class TestComponentInstallation(unittest.TestCase):
             raise Exception(result["Message"])
         cfg = result["Value"]
 
-        setup = cfg.getOption("DIRAC/Setup", "dirac-JenkinsSetup")
-
-        self.frameworkSetup = cfg.getOption("DIRAC/Setups/" + setup + "/Framework")
         self.rootPwd = cfg.getOption("Systems/Databases/Password")
         self.diracPwd = self.rootPwd
 
@@ -79,8 +76,8 @@ class ComponentInstallationChain(TestComponentInstallation):
 
         # Check whether the service is already present or not
         cfg = self.csClient.getCurrentCFG()["Value"]
-        if cfg.isSection("Systems/Framework/" + self.frameworkSetup + "/Services/Notification/") and cfg.isOption(
-            "Systems/Framework/" + self.frameworkSetup + "/URLs/Notification"
+        if cfg.isSection("Systems/Framework/Services/Notification/") and cfg.isOption(
+            "Systems/Framework/URLs/Notification"
         ):
             service1Present = True
 
@@ -92,12 +89,12 @@ class ComponentInstallationChain(TestComponentInstallation):
         # Check installation in CS
         cfg = self.csClient.getCurrentCFG()["Value"]
         self.assertTrue(
-            cfg.isSection("Systems/Framework/" + self.frameworkSetup + "/Services/Notification/")
-            and cfg.isOption("Systems/Framework/" + self.frameworkSetup + "/URLs/Notification")
+            cfg.isSection("Systems/Framework/Services/Notification/")
+            and cfg.isOption("Systems/Framework/URLs/Notification")
         )
 
         self.assertTrue(
-            cfg.getOption("Systems/Framework/" + self.frameworkSetup + "/URLs/Notification")
+            cfg.getOption("Systems/Framework/URLs/Notification")
             == "dips://" + self.host + ":" + str(self.notificationPort) + "/Framework/Notification"
         )
 
@@ -122,8 +119,8 @@ class ComponentInstallationChain(TestComponentInstallation):
 
         # Check whether the second service is already present or not
         cfg = self.csClient.getCurrentCFG()["Value"]
-        if cfg.isSection("Systems/Framework/" + self.frameworkSetup + "/Services/Notification2/") and cfg.isOption(
-            "Systems/Framework/" + self.frameworkSetup + "/URLs/Notification2"
+        if cfg.isSection("Systems/Framework/Services/Notification2/") and cfg.isOption(
+            "Systems/Framework/URLs/Notification2"
         ):
             service2Present = True
 
@@ -135,8 +132,8 @@ class ComponentInstallationChain(TestComponentInstallation):
         self.csClient.downloadCSData()
         cfg = self.csClient.getCurrentCFG()["Value"]
         self.assertTrue(
-            cfg.isSection("Systems/Framework/" + self.frameworkSetup + "/Services/Notification2/")
-            and cfg.isOption("Systems/Framework/" + self.frameworkSetup + "/URLs/Notification2")
+            cfg.isSection("Systems/Framework/Services/Notification2/")
+            and cfg.isOption("Systems/Framework/URLs/Notification2")
         )
 
         if not service1Present:
@@ -147,9 +144,9 @@ class ComponentInstallationChain(TestComponentInstallation):
         self.csClient.downloadCSData()
         cfg = self.csClient.getCurrentCFG()["Value"]
         self.assertTrue(
-            cfg.isSection("Systems/Framework/" + self.frameworkSetup + "/Services/Notification/")
-            and cfg.isSection("Systems/Framework/" + self.frameworkSetup + "/Services/Notification/")
-            and cfg.isOption("Systems/Framework/" + self.frameworkSetup + "/URLs/Notification")
+            cfg.isSection("Systems/Framework/Services/Notification/")
+            and cfg.isSection("Systems/Framework/Services/Notification/")
+            and cfg.isOption("Systems/Framework/URLs/Notification")
         )
 
         if not service2Present:
@@ -161,9 +158,9 @@ class ComponentInstallationChain(TestComponentInstallation):
             self.csClient.downloadCSData()
             cfg = self.csClient.getCurrentCFG()["Value"]
             self.assertTrue(
-                not cfg.isSection("Systems/Framework/" + self.frameworkSetup + "/Services/Notification/")
-                and not cfg.isSection("Systems/Framework/" + self.frameworkSetup + "/Services/Notification2/")
-                and not cfg.isOption("Systems/Framework/" + self.frameworkSetup + "/URLs/Notification")
+                not cfg.isSection("Systems/Framework/Services/Notification/")
+                and not cfg.isSection("Systems/Framework/Services/Notification2/")
+                and not cfg.isOption("Systems/Framework/URLs/Notification")
             )
 
     def testDatabase(self):
@@ -175,7 +172,7 @@ class ComponentInstallationChain(TestComponentInstallation):
         # Check installation in CS
         self.csClient.downloadCSData()
         cfg = self.csClient.getCurrentCFG()["Value"]
-        self.assertTrue(cfg.isSection("Systems/DataManagement/" + self.frameworkSetup + "/Databases/FTS3DB/"))
+        self.assertTrue(cfg.isSection("Systems/DataManagement/Databases/FTS3DB/"))
 
         # Check in database
         result = self.monitoringClient.getInstallations(
@@ -192,7 +189,7 @@ class ComponentInstallationChain(TestComponentInstallation):
         # Check uninstallation in CS
         self.csClient.downloadCSData()
         cfg = self.csClient.getCurrentCFG()["Value"]
-        self.assertTrue(not cfg.isSection("Systems/DataManagement/" + self.frameworkSetup + "/Databases/FTS3DB/"))
+        self.assertTrue(not cfg.isSection("Systems/DataManagement/Databases/FTS3DB/"))
 
 
 if __name__ == "__main__":

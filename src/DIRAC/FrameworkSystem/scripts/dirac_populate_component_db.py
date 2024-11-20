@@ -7,15 +7,12 @@ ComponentMonitoring service and the Notification service are installed and runni
 """
 from datetime import datetime
 
-from DIRAC import S_OK
+from DIRAC import S_OK, gLogger
 from DIRAC import exit as DIRACexit
-from DIRAC import gLogger
 from DIRAC.ConfigurationSystem.Client.CSAPI import CSAPI
-from DIRAC.ConfigurationSystem.Client.Helpers import CSGlobals
 from DIRAC.ConfigurationSystem.Client.Helpers.Operations import Operations
 from DIRAC.Core.Base.Script import Script
 from DIRAC.Core.Security.ProxyInfo import getProxyInfo
-from DIRAC.FrameworkSystem.Client.ComponentMonitoringClient import ComponentMonitoringClient
 from DIRAC.FrameworkSystem.Client.NotificationClient import NotificationClient
 from DIRAC.FrameworkSystem.Client.SystemAdministratorIntegrator import SystemAdministratorIntegrator
 from DIRAC.FrameworkSystem.Utilities import MonitoringUtilities
@@ -163,7 +160,7 @@ def main():
                         "Systems/"
                         + availableDB[db]["System"]
                         + "/"
-                        + cfg.getOption("DIRAC/Setups/" + CSGlobals.getSetup() + "/" + availableDB[db]["System"])
+                        + cfg.getOption(availableDB[db]["System"])
                         + "/Databases/"
                         + db
                         + "/"
@@ -179,8 +176,6 @@ def main():
                         record["Installation"]["InstallationTime"] = datetime.utcnow()
                         record["Installation"]["InstalledBy"] = user
                         records.append(record)
-
-    monitoringClient = ComponentMonitoringClient()
 
     # Add the installations to the database
     for record in records:

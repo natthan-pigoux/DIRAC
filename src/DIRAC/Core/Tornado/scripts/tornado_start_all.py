@@ -31,7 +31,6 @@ def main():
 
     localCfg = Script.localCfg
     localCfg.setConfigurationForTornado()
-    localCfg.addMandatoryEntry("/DIRAC/Setup")
     localCfg.addDefaultEntry("/DIRAC/Security/UseServerCertificate", "yes")
     localCfg.addDefaultEntry("LogColor", True)
     resultDict = localCfg.loadUserData()
